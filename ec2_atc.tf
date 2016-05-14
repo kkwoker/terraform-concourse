@@ -5,8 +5,14 @@ resource "aws_instance" "web" {
   instance_type = "m3.medium"
   subnet_id = "${aws_subnet.application-c.id}"
   associate_public_ip_address = true
-  user_data = "I2Nsb3VkLWNvbmZpZw0KcmVwb191cGRhdGU6IHRydWUNCnJlcG9fdXBncmFkZTogYWxsDQoNCnBhY2thZ2VzOg0KIC0gYW5zaWJsZQ0KDQpydW5jbWQ6DQogLSBzdWRvIGFuc2libGUtZ2FsYXh5IGluc3RhbGwga2t3b2tlci5jb25jb3Vyc2UgLS1mb3JjZQ0K"
+  user_data = "${file("resources/user_data.sh")}"
+  iam_instance_profile = "autonomous"
   tags {
     Name = "application.concourse-next"
+    Project = "concourse"
+    Environment = "next"
+    Role = "application"
+    ForgeBucket = "telusdigital-forge"
+    ForgeRegion = "eu-central-1"
   }
 }
