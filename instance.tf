@@ -1,17 +1,27 @@
+resource "aws_route53_record" "web" {
+  zone_id = "Z3PIZYOKTFK9RP"
+  name = "concourse"
+  type = "CNAME"
+  ttl = "60"
+  weight = 10
+  set_identifier = "concourse"
+  records = ["${aws_elb.web.dns_name}"]
+
+}
 resource "aws_elb" "web" {
   name = "concourse-elb"
   security_groups = ["${aws_security_group.application.id}"]
   listener {
     instance_port = 8080
-    instance_protocol = "http"
+    instance_protocol = "tcp"
     lb_port = 80
-    lb_protocol = "http"
+    lb_protocol = "tcp"
   }
   health_check {
     healthy_threshold = 2
     unhealthy_threshold = 2
     timeout = 3
-    target = "HTTP:8000/"
+    target = "TCP:8080"
     interval = 30
   }
   instances = ["${aws_instance.web.id}"]
@@ -65,7 +75,7 @@ resource "aws_security_group" "application" {
     from_port = 2222
     to_port   = 2222
     protocol  = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
     from_port = 0
