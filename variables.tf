@@ -16,5 +16,9 @@ variable "aws_amis" {
     us-west-2 = "ami-fa82739a"
     us-east-1 = "ami-840910ee"
   }
+  # Trusty
+  trusty = {
+   eu-west-1 =  "ami-f9a62c8a"
+  }
 }
 
