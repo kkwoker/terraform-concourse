@@ -6,8 +6,8 @@ resource "aws_route53_record" "web" {
   weight = 10
   set_identifier = "concourse"
   records = ["${aws_elb.web.dns_name}"]
-
 }
+
 resource "aws_elb" "web" {
   name = "concourse-elb"
   security_groups = ["${aws_security_group.application.id}"]
@@ -15,6 +15,18 @@ resource "aws_elb" "web" {
     instance_port = 8080
     instance_protocol = "tcp"
     lb_port = 80
+    lb_protocol = "tcp"
+  }
+  listener {
+    instance_port = 8080
+    instance_protocol = "tcp"
+    lb_port = 443
+    lb_protocol = "tcp"
+  }
+  listener {
+    instance_port = 2222
+    instance_protocol = "tcp"
+    lb_port = 2222
     lb_protocol = "tcp"
   }
   health_check {
